@@ -14,7 +14,7 @@ class MainViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), ContainerHost<MainState, MainSideEffect> {
 
-    private val initialState = savedStateHandle.toRoute<MainState>()
+    private val initialState = savedStateHandle.toRoute<MainState>(MainState.typeMap)
     override val container = viewModelScope.container<MainState, MainSideEffect>(initialState)
 
 

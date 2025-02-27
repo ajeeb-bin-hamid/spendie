@@ -14,7 +14,7 @@ class InsightsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), ContainerHost<InsightsState, InsightsSideEffect> {
 
-    private val initialState = savedStateHandle.toRoute<InsightsState>()
+    private val initialState = savedStateHandle.toRoute<InsightsState>(InsightsState.typeMap)
     override val container =
         viewModelScope.container<InsightsState, InsightsSideEffect>(initialState)
 

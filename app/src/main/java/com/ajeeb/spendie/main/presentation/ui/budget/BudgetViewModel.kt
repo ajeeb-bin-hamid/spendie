@@ -14,7 +14,7 @@ class BudgetViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), ContainerHost<BudgetState, BudgetSideEffect> {
 
-    private val initialState = savedStateHandle.toRoute<BudgetState>()
+    private val initialState = savedStateHandle.toRoute<BudgetState>(BudgetState.typeMap)
     override val container = viewModelScope.container<BudgetState, BudgetSideEffect>(initialState)
 
 

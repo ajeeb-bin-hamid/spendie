@@ -39,6 +39,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ajeeb.spendie.R
+import com.ajeeb.spendie.common.domain.model.Expense
 import com.ajeeb.spendie.main.presentation.ui.budget.BudgetScreen
 import com.ajeeb.spendie.main.presentation.ui.budget.BudgetViewModel
 import com.ajeeb.spendie.main.presentation.ui.home.HomeScreen
@@ -52,6 +53,7 @@ fun MainScreen(
     state: State<MainState>,
     sideEffect: Flow<MainSideEffect>,
     onEvent: (MainIntent) -> Unit,
+    navigateToExpenseScreen: (Expense?) -> Unit
 ) {
 
     val context = LocalContext.current
