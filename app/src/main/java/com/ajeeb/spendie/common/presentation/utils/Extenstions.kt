@@ -52,3 +52,28 @@ class SpendieNavType<T>(private val serializer: KSerializer<T>) :
         bundle.putString(key, Json.encodeToString(serializer, value))
     }
 }
+
+/**
+ * Creates a custom `NavType` for passing complex data classes as navigation arguments using JSON serialization.
+ */
+inline fun <reified T> navType(): NavType<T> {
+    return object : NavType<T>(isNullableAllowed = false) {
+
+        override fun get(bundle: Bundle, key: String): T? {
+            val jsonString = bundle.getString(key) ?: return null
+            return Json.decodeFromString(jsonString)
+        }
+
+        override fun parseValue(value: String): T {
+            return Json.decodeFromString(value)
+        }
+
+        override fun serializeAsValue(value: T): String {
+            return Json.encodeToString(value)
+        }
+
+        override fun put(bundle: Bundle, key: String, value: T) {
+            bundle.putString(key, Json.encodeToString(value))
+        }
+    }
+}

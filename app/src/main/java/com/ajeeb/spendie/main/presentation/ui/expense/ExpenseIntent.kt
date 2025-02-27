@@ -8,4 +8,6 @@ sealed class ExpenseIntent {
     data class SetDate(val date: String) : ExpenseIntent()
     data class SetNotes(val notes: String) : ExpenseIntent()
     data object SaveExpense : ExpenseIntent()
+    data object UpdateExpense : ExpenseIntent()
+    data object DeleteExpense : ExpenseIntent()
 }

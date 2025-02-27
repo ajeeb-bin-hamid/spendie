@@ -20,4 +20,6 @@
     <string name="choose_category">Choose category</string>
     <string name="choose_a_category_for_your_expense">Choose a category for your expense</string>
     <string name="expense_saved_successfully">Expense saved successfully</string>
+    <string name="my_expenses">My Expenses</string>
+    <string name="expense_deleted_successfully">Expense deleted successfully</string>
 </resources>

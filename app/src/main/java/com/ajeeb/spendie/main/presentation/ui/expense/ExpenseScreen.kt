@@ -98,6 +98,15 @@ fun ExpenseScreen(
                     ).show()
                     navigateBack()
                 }
+
+                is ExpenseSideEffect.ExpenseDeleted -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.expense_deleted_successfully),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    navigateBack()
+                }
             }
         }
     }
@@ -125,6 +134,7 @@ fun ExpenseScreen(
                     .padding(padding),
             ) {
 
+                //Top bar
                 TopAppBar(title = {
                     Text(
                         text = stringResource(R.string.expense),
@@ -140,8 +150,20 @@ fun ExpenseScreen(
                         )
                     }
 
-                }, backgroundColor = MaterialTheme.colorScheme.background, elevation = 0.dp)
+                }, actions = {
+                    if (state.value.isEditMode) {
+                        IconButton(onClick = { onEvent(ExpenseIntent.DeleteExpense) }) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_trash),
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                            )
+                        }
+                    }
+                }, backgroundColor = MaterialTheme.colorScheme.background, elevation = 0.dp
+                )
 
+                //Main content
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -231,7 +253,7 @@ fun ExpenseScreen(
                         value = state.value.notes ?: "",
                         label = stringResource(R.string.notes),
                         placeholder = stringResource(R.string.enter_notes),
-                        isError = false,
+                        isError = state.value.isErrorOnNotes,
                         setOnValueChange = { newText ->
                             onEvent(ExpenseIntent.SetNotes(newText))
                         },
@@ -250,7 +272,11 @@ fun ExpenseScreen(
                             .padding(horizontal = 16.dp),
                         shape = RoundedCornerShape(16.dp),
                         onClick = {
-                            onEvent(ExpenseIntent.SaveExpense)
+                            if (state.value.isEditMode) {
+                                onEvent(ExpenseIntent.UpdateExpense)
+                            } else {
+                                onEvent(ExpenseIntent.SaveExpense)
+                            }
                         },
                         colors = ButtonDefaults.buttonColors().copy(
                             containerColor = MaterialTheme.colorScheme.primary,

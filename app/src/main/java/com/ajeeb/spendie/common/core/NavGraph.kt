@@ -57,7 +57,9 @@ fun NavGraph() {
                             amount = expense.amount.toString(),
                             category = expense.category,
                             date = expense.date,
-                            notes = expense.notes
+                            notes = expense.notes,
+                            isEditMode = true,
+                            expenseId = expense.expenseId
                         )
                     )
                 } else {

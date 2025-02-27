@@ -10,5 +10,5 @@ data class Expense(
     val amount: Double,
     val category: CategoryType,
     val date: String,
-    val notes: String?
+    val notes: String
 )

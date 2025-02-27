@@ -7,7 +7,6 @@ import kotlin.reflect.KType
 
 @Serializable
 data class ExpenseState(
-    val isLoading: Boolean = false,
     val amount: String = "",
     val category: CategoryType? = null,
     val date: String? = null,
@@ -15,6 +14,9 @@ data class ExpenseState(
     val isErrorOnAmount: Boolean = false,
     val isErrorOnCategory: Boolean = false,
     val isErrorOnDate: Boolean = false,
+    val isErrorOnNotes: Boolean = false,
+    val isEditMode: Boolean = false,
+    val expenseId: Int? = null
 ) {
     companion object {
         val typeMap: Map<KType, NavType<out Any>> = mapOf()

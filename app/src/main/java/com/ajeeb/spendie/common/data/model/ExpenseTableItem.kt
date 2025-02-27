@@ -13,5 +13,5 @@ data class ExpenseTableItem(
     val amount: Double,
     val category: CategoryType,
     val date: String,
-    val notes: String?
+    val notes: String
 )
