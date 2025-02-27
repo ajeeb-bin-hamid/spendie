@@ -1,6 +1,7 @@
 package com.ajeeb.spendie.main.presentation.ui.budget
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,12 +19,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,14 +35,19 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.ajeeb.spendie.R
 import com.ajeeb.spendie.common.core.Bills
 import com.ajeeb.spendie.common.core.Entertainment
@@ -46,6 +55,7 @@ import com.ajeeb.spendie.common.core.FoodAndBev
 import com.ajeeb.spendie.common.core.Miscellaneous
 import com.ajeeb.spendie.common.core.Transport
 import com.ajeeb.spendie.common.core.poppinsFontFamily
+import com.ajeeb.spendie.common.presentation.ui.text_field.basic.SpendieBasicTextField
 import com.ajeeb.spendie.main.domain.enums.CategoryType
 import kotlinx.coroutines.flow.Flow
 
@@ -58,6 +68,7 @@ fun BudgetScreen(
 
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+
 
     /**Collect SideEffects using Orbit*/
     LaunchedEffect(Unit) {
@@ -75,6 +86,23 @@ fun BudgetScreen(
             .fillMaxSize()
             .safeDrawingPadding()
     ) { padding ->
+
+        SetBudgetDialog(
+            showDialog = state.value.dialogCategoryType != null,
+            budgetState = state,
+            onDismiss = {
+                onEvent(BudgetIntent.SetSheetCategoryType(null))
+            },
+            onValueChange = {
+                onEvent(BudgetIntent.SetDialogFieldValue(it))
+            },
+            onClickCancel = {
+                onEvent(BudgetIntent.SetSheetCategoryType(null))
+            },
+            onClickSave = { categoryType ->
+                onEvent(BudgetIntent.SaveBudget(categoryType))
+            })
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -105,17 +133,70 @@ fun BudgetScreen(
                 BudgetCard(
                     modifier = Modifier.fillMaxWidth(),
                     categoryType = CategoryType.FOOD_AND_BEVERAGES,
-                    spends = 2000.0,
-                    budget = null
-                )
+                    spends = state.value.foodAndBevSpends,
+                    budget = state.value.foodAndBevBudget
+                ) {
+                    onEvent(BudgetIntent.SetSheetCategoryType(CategoryType.FOOD_AND_BEVERAGES))
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                BudgetCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    categoryType = CategoryType.TRANSPORT,
+                    spends = state.value.transportSpends,
+                    budget = state.value.transportBudget
+                ) {
+                    onEvent(BudgetIntent.SetSheetCategoryType(CategoryType.TRANSPORT))
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                BudgetCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    categoryType = CategoryType.ENTERTAINMENT,
+                    spends = state.value.entertainmentSpends,
+                    budget = state.value.entertainmentBudget
+                ) {
+                    onEvent(BudgetIntent.SetSheetCategoryType(CategoryType.ENTERTAINMENT))
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                BudgetCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    categoryType = CategoryType.BILLS,
+                    spends = state.value.billsSpends,
+                    budget = state.value.billsBudget
+                ) {
+                    onEvent(BudgetIntent.SetSheetCategoryType(CategoryType.BILLS))
+                }
+
+                Spacer(Modifier.height(16.dp))
+
+                BudgetCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    categoryType = CategoryType.MISCELLANEOUS,
+                    spends = state.value.miscellaneousSpends,
+                    budget = state.value.miscellaneousBudget
+                ) {
+                    onEvent(BudgetIntent.SetSheetCategoryType(CategoryType.MISCELLANEOUS))
+                }
+
+                Spacer(Modifier.height(16.dp))
             }
         }
     }
 }
 
+
 @Composable
 private fun BudgetCard(
-    modifier: Modifier = Modifier, categoryType: CategoryType, spends: Double, budget: Double?
+    modifier: Modifier = Modifier,
+    categoryType: CategoryType,
+    spends: Double,
+    budget: Double?,
+    onClickEdit: () -> Unit
 ) {
 
     val backgroundColor = when (categoryType) {
@@ -203,7 +284,7 @@ private fun BudgetCard(
 
             Spacer(Modifier.width(12.dp))
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = { onClickEdit() }) {
                 Image(
                     painter = painterResource(R.drawable.ic_edit),
                     contentDescription = null,
@@ -271,5 +352,115 @@ fun AmountCard(modifier: Modifier = Modifier, title: String, value: String) {
             fontSize = 14.sp,
             color = MaterialTheme.colorScheme.onBackground
         )
+    }
+}
+
+@Composable
+fun SetBudgetDialog(
+    showDialog: Boolean,
+    budgetState: State<BudgetState>,
+    onDismiss: () -> Unit,
+    onValueChange: (String) -> Unit,
+    onClickCancel: () -> Unit,
+    onClickSave: (CategoryType) -> Unit
+) {
+
+    val categoryType = budgetState.value.dialogCategoryType
+
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .background(
+                        MaterialTheme.colorScheme.background, shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(16.dp)
+
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    //Amount TextField
+                    SpendieBasicTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = budgetState.value.dialogFieldText,
+                        label = stringResource(R.string.amount),
+                        placeholder = stringResource(R.string.enter_amount),
+                        isError = budgetState.value.isErrorOnBudgetAmount,
+                        setOnValueChange = { newText ->
+                            onValueChange(newText)
+                        },
+                        leadingIcon = {
+                            androidx.compose.material3.Text(stringResource(R.string.rupee_symbol))
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+                        )
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    //Buttons
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        //Cancel button
+                        Button(
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
+                            onClick = {
+                                onClickCancel()
+                            },
+                            border = BorderStroke(
+                                width = 1.dp, color = MaterialTheme.colorScheme.surface
+                            ),
+                            colors = ButtonDefaults.buttonColors().copy(
+                                containerColor = Color.Transparent,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Text(
+                                text = stringResource(R.string.cancel),
+                                style = MaterialTheme.typography.displayMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.padding(vertical = 8.dp),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+
+                        Spacer(Modifier.width(12.dp))
+
+                        //Save Button
+                        Button(
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(16.dp),
+                            onClick = {
+                                categoryType?.let {
+                                    onClickSave(categoryType)
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors().copy(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Text(
+                                text = stringResource(R.string.save),
+                                style = MaterialTheme.typography.displayMedium,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

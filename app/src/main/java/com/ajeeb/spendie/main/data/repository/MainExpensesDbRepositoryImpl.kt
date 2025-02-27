@@ -4,7 +4,9 @@ import com.ajeeb.spendie.common.data.model.ExpenseTableItem
 import com.ajeeb.spendie.common.domain.model.Expense
 import com.ajeeb.spendie.common.domain.utils.Issues
 import com.ajeeb.spendie.main.data.db.MainExpensesDbDao
+import com.ajeeb.spendie.main.data.utils.mapToCategorySpendsFlow
 import com.ajeeb.spendie.main.data.utils.mapToExpensesFlow
+import com.ajeeb.spendie.main.domain.dto.CategorySpend
 import com.ajeeb.spendie.main.domain.repository.MainExpensesDbRepository
 import com.tapes.app.common.domain.utils.Result
 import kotlinx.coroutines.flow.Flow
@@ -61,5 +63,9 @@ class MainExpensesDbRepositoryImpl(
         }
     }
 
-
+    override fun getTotalSpendsByCategory(): Flow<CategorySpend> {
+        val rawFlow = mainExpensesDbDao.getTotalSpendsByCategory()
+        val formattedFlow = mapToCategorySpendsFlow(rawFlow)
+        return formattedFlow
+    }
 }

@@ -120,7 +120,6 @@ fun ExpenseScreen(
                 closeSheet()
             }
         }) {
-
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
@@ -169,6 +168,7 @@ fun ExpenseScreen(
                         .fillMaxWidth()
                         .verticalScroll(scrollState)
                 ) {
+
                     //Amount TextField
                     SpendieBasicTextField(
                         modifier = Modifier

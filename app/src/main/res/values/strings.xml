@@ -32,4 +32,8 @@
     <string name="amount_value">₹%1$s</string>
     <string name="total_spends">Total spends</string>
     <string name="total_budget">Total budget</string>
+    <string name="set_budget">Set Budget</string>
+    <string name="set_your_budget_for">Set your budget for %1$s</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
 </resources>
