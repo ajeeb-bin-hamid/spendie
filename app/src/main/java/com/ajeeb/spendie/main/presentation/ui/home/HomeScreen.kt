@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -98,16 +97,6 @@ fun HomeScreen(
                         style = MaterialTheme.typography.headlineLarge,
                         color = MaterialTheme.colorScheme.onBackground
                     )
-                },
-
-                actions = {
-                    IconButton(onClick = { }) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_arrow_left),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
-                        )
-                    }
                 },
 
                 backgroundColor = MaterialTheme.colorScheme.background, elevation = 0.dp,

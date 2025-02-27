@@ -92,4 +92,7 @@ dependencies {
     //Datastore
     implementation(libs.datastore)
     implementation(libs.datastore.preferences)
+
+    //Compose charts
+    implementation(libs.compose.charts)
 }
