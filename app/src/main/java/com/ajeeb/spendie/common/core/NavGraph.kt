@@ -50,8 +50,19 @@ fun NavGraph() {
             val sideEffect = vm.container.sideEffectFlow
             val onEvent = vm::onEvent
 
-            MainScreen(state, sideEffect, onEvent) {
-                navController.navigate(ExpenseState())
+            MainScreen(state, sideEffect, onEvent) { expense ->
+                if (expense != null) {
+                    navController.navigate(
+                        ExpenseState(
+                            amount = expense.amount.toString(),
+                            category = expense.category,
+                            date = expense.date,
+                            notes = expense.notes
+                        )
+                    )
+                } else {
+                    navController.navigate(ExpenseState())
+                }
             }
         }
 

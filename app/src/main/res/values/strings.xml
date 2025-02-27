@@ -3,4 +3,6 @@
     <string name="home">Home</string>
     <string name="budgets">Budgets</string>
     <string name="insights">Insights</string>
+    <string name="amount">Amount</string>
+    <string name="enter_amount">Enter amount</string>
 </resources>

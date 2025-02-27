@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.ajeeb.spendie.common.domain.model.Expense
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -25,6 +26,7 @@ fun HomeScreen(
     state: State<HomeState>,
     sideEffect: Flow<HomeSideEffect>,
     onEvent: (HomeIntent) -> Unit,
+    navigateToExpenseScreen: (Expense?) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -44,7 +46,7 @@ fun HomeScreen(
         .fillMaxSize()
         .safeDrawingPadding(), floatingActionButton = {
         HomeFAB {
-            //
+            navigateToExpenseScreen(null)
         }
     }) { padding ->
         Column(

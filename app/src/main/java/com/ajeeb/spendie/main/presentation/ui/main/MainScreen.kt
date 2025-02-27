@@ -101,7 +101,7 @@ fun MainScreen(
                     val homeSideEffect = vm.container.sideEffectFlow
                     val homeOnEvent = vm::onEvent
 
-                    HomeScreen(homeState, homeSideEffect, homeOnEvent)
+                    HomeScreen(homeState, homeSideEffect, homeOnEvent, navigateToExpenseScreen)
                 }
 
                 composable(BUDGET) {
