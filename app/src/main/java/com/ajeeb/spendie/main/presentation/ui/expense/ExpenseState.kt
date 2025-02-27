@@ -12,7 +12,9 @@ data class ExpenseState(
     val category: CategoryType? = null,
     val date: String? = null,
     val notes: String? = "",
-    val isErrorOnAmount: Boolean = false
+    val isErrorOnAmount: Boolean = false,
+    val isErrorOnCategory: Boolean = false,
+    val isErrorOnDate: Boolean = false,
 ) {
     companion object {
         val typeMap: Map<KType, NavType<out Any>> = mapOf()

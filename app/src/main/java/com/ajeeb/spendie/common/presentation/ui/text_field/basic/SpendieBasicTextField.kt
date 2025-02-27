@@ -14,8 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -27,6 +25,7 @@ fun SpendieBasicTextField(
     label: String,
     placeholder: String,
     isError: Boolean,
+    keyboardOptions: KeyboardOptions,
     setOnValueChange: (String) -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
@@ -43,9 +42,7 @@ fun SpendieBasicTextField(
         isError = isError,
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
-        keyboardOptions = KeyboardOptions.Default.copy(
-            capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Done
-        ),
+        keyboardOptions = keyboardOptions,
         label = {
             Text(
                 text = label,

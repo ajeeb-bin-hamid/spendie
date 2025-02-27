@@ -5,4 +5,19 @@
     <string name="insights">Insights</string>
     <string name="amount">Amount</string>
     <string name="enter_amount">Enter amount</string>
+    <string name="expense">Expense</string>
+    <string name="rupee_symbol">₹</string>
+    <string name="category">Category</string>
+    <string name="food_beverages"><![CDATA[Food & Beverages]]></string>
+    <string name="transport">Transport</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="bills">Bills</string>
+    <string name="miscellaneous">Miscellaneous</string>
+    <string name="date">Date</string>
+    <string name="notes">Notes</string>
+    <string name="enter_notes">Enter notes</string>
+    <string name="save_expense">Save Expense</string>
+    <string name="choose_category">Choose category</string>
+    <string name="choose_a_category_for_your_expense">Choose a category for your expense</string>
+    <string name="expense_saved_successfully">Expense saved successfully</string>
 </resources>

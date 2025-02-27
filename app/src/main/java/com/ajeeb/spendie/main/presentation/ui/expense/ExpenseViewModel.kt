@@ -4,12 +4,22 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.ajeeb.spendie.common.domain.model.Expense
+import com.ajeeb.spendie.common.presentation.utils.currentState
+import com.ajeeb.spendie.common.presentation.utils.postSideEffect
+import com.ajeeb.spendie.common.presentation.utils.reduceState
+import com.ajeeb.spendie.main.domain.enums.CategoryType
+import com.ajeeb.spendie.main.domain.usecase.InsertNewExpenseUseCase
+import com.tapes.app.common.domain.utils.Result
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.container
 import javax.inject.Inject
 
+@HiltViewModel
 class ExpenseViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle, private val insertNewExpenseUseCase: InsertNewExpenseUseCase
 ) : ViewModel(), ContainerHost<ExpenseState, ExpenseSideEffect> {
 
     private val initialState = savedStateHandle.toRoute<ExpenseState>(ExpenseState.typeMap)
@@ -17,6 +27,74 @@ class ExpenseViewModel @Inject constructor(
 
 
     fun onEvent(event: ExpenseIntent) {
-        //
+        when (event) {
+            is ExpenseIntent.SetAmount -> setAmount(event.amount)
+            is ExpenseIntent.SetCategory -> setCategory(event.category)
+            is ExpenseIntent.SetDate -> setDate(event.date)
+            is ExpenseIntent.SetNotes -> setNotes(event.notes)
+            is ExpenseIntent.SaveExpense -> saveExpense()
+        }
+    }
+
+    private fun setAmount(amount: String) {
+        viewModelScope.launch {
+            reduceState { copy(amount = amount, isErrorOnAmount = false) }
+        }
+    }
+
+    private fun setCategory(category: CategoryType) {
+        viewModelScope.launch {
+            reduceState { copy(category = category, isErrorOnCategory = false) }
+        }
+    }
+
+    private fun setDate(date: String) {
+        viewModelScope.launch {
+            reduceState { copy(date = date, isErrorOnDate = false) }
+        }
+    }
+
+    private fun setNotes(notes: String) {
+        viewModelScope.launch {
+            reduceState { copy(notes = notes) }
+        }
+    }
+
+    private fun saveExpense() {
+        viewModelScope.launch {
+
+            val amount = currentState.amount.toDoubleOrNull()
+            val category = currentState.category
+            val date = currentState.date
+            val note = currentState.notes
+
+            if (amount != null && amount != 0.0 && category != null && !date.isNullOrBlank()) {
+                val expense = Expense(
+                    expenseId = 0, amount = amount, category = category, date = date, notes = note
+                )
+                when (insertNewExpenseUseCase(expense)) {
+                    is Result.Success -> postSideEffect {
+                        ExpenseSideEffect.ExpenseSaved
+                    }
+
+                    is Result.Error -> postSideEffect {
+                        ExpenseSideEffect.ShowToast("Unable to insert")
+                    }
+                }
+
+            } else when {
+                amount == null || amount == 0.0 -> {
+                    reduceState { copy(isErrorOnAmount = true) }
+                }
+
+                category == null -> {
+                    reduceState { copy(isErrorOnCategory = true) }
+                }
+
+                date.isNullOrBlank() -> {
+                    reduceState { copy(isErrorOnDate = true) }
+                }
+            }
+        }
     }
 }

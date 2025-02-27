@@ -73,7 +73,9 @@ fun NavGraph() {
             val sideEffect = vm.container.sideEffectFlow
             val onEvent = vm::onEvent
 
-            ExpenseScreen(state, sideEffect, onEvent)
+            ExpenseScreen(state = state, sideEffect = sideEffect, onEvent = onEvent) {
+                navController.popBackStack()
+            }
         }
     }
 }

@@ -26,7 +26,9 @@ fun SpendieTextPicker(
     placeholder: String,
     value: String?,
     isError: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isArrowVisible: Boolean = true,
+    leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     Row(modifier = modifier
         .clickable {
@@ -41,24 +43,32 @@ fun SpendieTextPicker(
             }, shape = RoundedCornerShape(16.dp)
         )
         .padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(R.drawable.ic_calendar),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
-        )
+
+        leadingIcon?.let {
+            leadingIcon()
+        }
 
         Spacer(Modifier.width(6.dp))
 
         Text(
-            text = value ?: placeholder,
+            modifier = Modifier.weight(1f),
+            text = if (value.isNullOrBlank()) placeholder else value,
             style = MaterialTheme.typography.bodyMedium,
-            color = if (value != null) {
+            color = if (!value.isNullOrBlank()) {
                 MaterialTheme.colorScheme.onBackground
             } else {
                 MaterialTheme.colorScheme.secondary
             }
         )
+
+        if (isArrowVisible) {
+            Image(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.ic_arrow_down),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+            )
+        }
     }
 
 }
