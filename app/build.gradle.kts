@@ -65,6 +65,7 @@ dependencies {
 
     //Navigation
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material)
 
     //Retrofit
     implementation(libs.retrofit)
