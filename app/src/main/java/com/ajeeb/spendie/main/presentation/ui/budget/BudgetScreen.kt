@@ -299,7 +299,7 @@ private fun BudgetCard(
         Row(modifier = Modifier.fillMaxWidth()) {
             AmountCard(
                 title = stringResource(R.string.total_spends), value = stringResource(
-                    R.string.amount_value, spends
+                    R.string.inr_value, spends
                 )
             )
 
@@ -307,7 +307,7 @@ private fun BudgetCard(
 
             AmountCard(
                 title = stringResource(R.string.total_budget), value = if (budget != null) {
-                    stringResource(R.string.amount_value, budget)
+                    stringResource(R.string.inr_value, budget)
                 } else {
                     stringResource(R.string.infinity_symbol)
                 }

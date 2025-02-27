@@ -29,11 +29,14 @@
     <string name="over_budget">Over budget! 🚨</string>
     <string name="my_budget">My Budget</string>
     <string name="infinity_symbol">∞</string>
-    <string name="amount_value">₹%1$s</string>
+    <string name="inr_value">₹%1$s</string>
+    <string name="usd_value">$%1$s</string>
     <string name="total_spends">Total spends</string>
     <string name="total_budget">Total budget</string>
     <string name="set_budget">Set Budget</string>
     <string name="set_your_budget_for">Set your budget for %1$s</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+    <string name="inr">INR</string>
+    <string name="usd">USD</string>
 </resources>

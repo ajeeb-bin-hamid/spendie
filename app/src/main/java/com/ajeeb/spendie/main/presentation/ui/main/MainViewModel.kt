@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel(), ContainerHost<MainState, MainSideEffect> {
 
     private val initialState = savedStateHandle.toRoute<MainState>(MainState.typeMap)
