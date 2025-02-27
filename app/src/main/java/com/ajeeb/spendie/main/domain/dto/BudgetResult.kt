@@ -1,18 +1,12 @@
-package com.ajeeb.spendie.main.presentation.ui.budget
+package com.ajeeb.spendie.main.domain.dto
 
-import androidx.navigation.NavType
 import kotlinx.serialization.Serializable
-import kotlin.reflect.KType
 
 @Serializable
-data class BudgetState(
+data class BudgetResult(
     val foodAndBevBudget: Double? = null,
     val transportBudget: Double? = null,
     val entertainmentBudget: Double? = null,
     val billsBudget: Double? = null,
     val miscellaneousBudget: Double? = null
-) {
-    companion object {
-        val typeMap: Map<KType, NavType<out Any>> = mapOf()
-    }
-}
+)

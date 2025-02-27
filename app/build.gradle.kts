@@ -26,8 +26,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -89,4 +88,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.sqlite.bundled)
     ksp(libs.androidx.room.compiler)
+
+    //Datastore
+    implementation(libs.datastore)
+    implementation(libs.datastore.preferences)
 }
