@@ -73,7 +73,7 @@ class InsightsViewModel @Inject constructor(
                     CurrencyType.USD -> reduceState { copy(currencyType = CurrencyType.INR) }
                 }
             } else postSideEffect {
-                InsightsSideEffect.ShowToast("Wait till forex rate is fetched")
+                InsightsSideEffect.ShowToast("Please wait till forex rate is fetched")
             }
         }
     }

@@ -39,4 +39,5 @@
     <string name="cancel">Cancel</string>
     <string name="inr">INR</string>
     <string name="usd">USD</string>
+    <string name="no_expenses_text">Please add expenses to start tracking your spending habits</string>
 </resources>

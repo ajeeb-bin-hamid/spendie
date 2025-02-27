@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -104,16 +105,29 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
-            ) {
-                itemsIndexed(items = state.value.expenses) { _, expense ->
-                    ExpenseItem(modifier = Modifier.padding(bottom = 16.dp), expense = expense) {
-                        navigateToExpenseScreen(expense)
+            if (state.value.expenses.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 16.dp)
+                ) {
+                    itemsIndexed(items = state.value.expenses) { _, expense ->
+                        ExpenseItem(
+                            modifier = Modifier.padding(bottom = 16.dp), expense = expense
+                        ) {
+                            navigateToExpenseScreen(expense)
+                        }
                     }
+                }
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(R.string.no_expenses_text),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.secondary,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
@@ -158,8 +172,7 @@ fun ExpenseItem(modifier: Modifier = Modifier, expense: Expense, onClick: () -> 
         .clickable {
             onClick()
         }
-        .padding(16.dp)
-    ) {
+        .padding(16.dp)) {
 
         Box(
             modifier = Modifier
