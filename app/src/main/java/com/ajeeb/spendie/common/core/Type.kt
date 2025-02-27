@@ -18,7 +18,7 @@ fun poppinsFontFamily() = FontFamily(
 )
 
 @Composable
-fun bumbleCarTypography() = Typography(
+fun spendieTypography() = Typography(
     bodyLarge = TextStyle(
         fontFamily = poppinsFontFamily(), fontWeight = FontWeight.Normal, fontSize = 20.sp
     ), bodyMedium = TextStyle(

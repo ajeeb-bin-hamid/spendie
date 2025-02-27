@@ -5,9 +5,10 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.BottomNavigation
@@ -17,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -36,6 +39,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ajeeb.spendie.R
+import com.ajeeb.spendie.main.presentation.ui.budget.BudgetScreen
+import com.ajeeb.spendie.main.presentation.ui.budget.BudgetViewModel
+import com.ajeeb.spendie.main.presentation.ui.home.HomeScreen
+import com.ajeeb.spendie.main.presentation.ui.home.HomeViewModel
+import com.ajeeb.spendie.main.presentation.ui.insights.InsightsScreen
+import com.ajeeb.spendie.main.presentation.ui.insights.InsightsViewModel
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -67,12 +76,52 @@ fun MainScreen(
             .background(MaterialTheme.colorScheme.background)
             .safeDrawingPadding()
     ) { padding ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            contentAlignment = Alignment.BottomCenter
         ) {
+
+            //Main Content
+            NavHost(
+                navController = mainNavController,
+                startDestination = HOME,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                composable(HOME) {
+
+                    val vm = hiltViewModel<HomeViewModel>()
+                    val homeState = vm.container.stateFlow.collectAsState()
+                    val homeSideEffect = vm.container.sideEffectFlow
+                    val homeOnEvent = vm::onEvent
+
+                    HomeScreen(homeState, homeSideEffect, homeOnEvent)
+                }
+
+                composable(BUDGET) {
+
+                    val vm = hiltViewModel<BudgetViewModel>()
+                    val budgetState = vm.container.stateFlow.collectAsState()
+                    val budgetSideEffect = vm.container.sideEffectFlow
+                    val budgetOnEvent = vm::onEvent
+
+                    BudgetScreen(budgetState, budgetSideEffect, budgetOnEvent)
+                }
+
+                composable(INSIGHTS) {
+
+                    val vm = hiltViewModel<InsightsViewModel>()
+                    val insightsState = vm.container.stateFlow.collectAsState()
+                    val insightsSideEffect = vm.container.sideEffectFlow
+                    val insightsOnEvent = vm::onEvent
+
+                    InsightsScreen(insightsState, insightsSideEffect, insightsOnEvent)
+                }
+            }
 
             val dividerColor = MaterialTheme.colorScheme.surface
             BottomNavigation(elevation = 0.dp,
@@ -114,19 +163,6 @@ fun MainScreen(
                     contentDescription = stringResource(R.string.insights)
                 )
             }
-
-            //Main Content
-            NavHost(
-                navController = mainNavController,
-                startDestination = HOME,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None },
-                modifier = Modifier.fillMaxSize()
-            ) {
-                composable(HOME) {
-
-                }
-            }
         }
     }
 }
@@ -153,7 +189,7 @@ private fun RowScope.BottomBarItem(
                 },
                 contentDescription = contentDescription,
                 modifier = Modifier.align(Alignment.CenterVertically),
-                colorFilter = ColorFilter.tint(androidx.compose.material.MaterialTheme.colors.onBackground)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
             )
 
         },
@@ -166,7 +202,7 @@ private fun RowScope.BottomBarItem(
                 restoreState = true
             }
         },
-        modifier = modifier.background(androidx.compose.material.MaterialTheme.colors.background),
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
     )
 }
 

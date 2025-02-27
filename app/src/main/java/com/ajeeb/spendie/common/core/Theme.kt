@@ -36,6 +36,6 @@ fun SpendieTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme, typography = bumbleCarTypography(), content = content
+        colorScheme = colorScheme, typography = spendieTypography(), content = content
     )
 }
